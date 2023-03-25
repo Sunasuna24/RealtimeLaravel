@@ -22,7 +22,7 @@ class UserSessionChanged implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($message, $type)
+    public function __construct(string $message, string $type)
     {
         $this->message = $message;
         $this->type = $type;
@@ -35,6 +35,8 @@ class UserSessionChanged implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+        \Log::debug($this->message);
+        \Log::debug($this->type);
         return new Channel('notifications');
     }
 }
