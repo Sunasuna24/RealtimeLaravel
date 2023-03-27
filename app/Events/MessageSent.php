@@ -11,20 +11,22 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class WinnerNumberGenerated implements ShouldBroadcast
+class MessageSent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $number;
+    public $user;       // メッセージを送る人
+    public $message;    // メッセージの本文
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($number)
+    public function __construct(User $user, $message)
     {
-        $this->number = $number;
+        $this->user = $user;
+        $this->message = $message;
     }
 
     /**
@@ -34,6 +36,7 @@ class WinnerNumberGenerated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('game');
+        \Log::debug("{$this->user->name}: {$this->message}");
+        return new PresenceChannel('chat');
     }
 }
