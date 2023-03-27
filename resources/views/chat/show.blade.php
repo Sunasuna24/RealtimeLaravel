@@ -79,6 +79,14 @@
             element.innerText = e.user.name + ': ' + e.message;
             messagesElement.appendChild(element);
         });
+
+    Echo.private('chat.greet.{{ auth()->user()->id }}')
+        .listen('GreetingSent', (e) => {
+            let element = document.createElement('li');
+            element.innerText = e.message;
+            element.classList.add('text-success');
+            messagesElement.appendChild(element);
+        });
 </script>
 
 <script type="module">
