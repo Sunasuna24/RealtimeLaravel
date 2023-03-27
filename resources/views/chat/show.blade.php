@@ -17,10 +17,7 @@
                         <div class="col-10">
                             <div class="row">
                                 <div class="col-12 border rounded-lg p-3">
-                                    <ul id="messages" class="list-unstyled overflow-auto" style="height: 45vh">
-                                        <li>Test1: Hello</li>
-                                        <li>Test2: Hi there</li>
-                                    </ul>
+                                    <ul id="messages" class="list-unstyled overflow-auto" style="height: 45vh"></ul>
                                 </div>
                             </div>
                             <form action="" method="post">
@@ -51,6 +48,7 @@
 @push('scripts')
 <script type="module">
     const usersElement = document.getElementById('users');
+    const messagesElement = document.getElementById('messages');
 
     Echo.join('chat')
         .here((users) => {
@@ -70,6 +68,11 @@
         .leaving((user) => {
             const element = document.getElementById(user.id);
             element.parentNode.removeChild(element);
+        })
+        .listen('MessageSent', (e) => {
+            let element = document.createElement('li');
+            element.innerText = e.user.name + ': ' + e.message;
+            messagesElement.appendChild(element);
         });
 </script>
 
